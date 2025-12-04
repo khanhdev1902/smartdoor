@@ -44,7 +44,7 @@ export function useUser() {
     });
 
     if (res) {
-      setUsers((prev) => [...prev, res.data]);
+      setUsers((prev) => [...prev, res.data.data]);
       return res.data;
     }
     return null;
