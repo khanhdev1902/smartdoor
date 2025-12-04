@@ -117,4 +117,10 @@
   body {
     @apply bg-background text-foreground;
   }
+  .color-primary {
+    @apply bg-linear-to-tr from-[#c02425] to-[#f0cb35] bg-clip-text text-transparent;
+  }
+  .color-primary-hover:hover {
+    @apply bg-linear-to-tr from-[#c02425] to-[#f0cb35] bg-clip-text text-transparent;
+  }
 }

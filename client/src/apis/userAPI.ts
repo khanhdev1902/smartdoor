@@ -6,8 +6,14 @@ const userAPI = {
   getUserById: (id: number) => http.get<User>(`/users/${id}`),
   createUser: (data: Omit<User, "id">) => http.post("/users", data),
   updateUser: (id: number, data: Partial<User>) =>
-    http.put<User>(`/users/${id}`, data),
+    http.put(`/users/${id}`, data),
   deleteUser: (id: number) => http.delete(`/users/${id}`),
+  // getUsers: () => http.get<User[]>("/users"),
+  // getUserById: (id: number) => http.get<User>(`/users/${id}`),
+  // createUser: (data: Omit<User, "id">) => http.post<User>("/users", data),
+  // updateUser: (id: number, data: Partial<User>) =>
+  //   http.put<User>(`/users/${id}`, data),
+  // deleteUser: (id: number) => http.delete(`/users/${id}`),
 };
 
 export default userAPI;

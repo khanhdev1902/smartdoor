@@ -4,7 +4,7 @@ exports.userController = {
   // Lấy tất cả user
   async getAllUsers(req, res) {
     try {
-      const users = await UserModel.findAll();
+      const users = await UserModel.findAll({ order: [["id", "ASC"]] });
       res.json({ success: true, data: users });
     } catch (error) {
       console.error(error);
@@ -19,7 +19,9 @@ exports.userController = {
       const user = await UserModel.findByPk(id);
 
       if (!user) {
-        return res.status(404).json({ success: false, message: "User not found" });
+        return res
+          .status(404)
+          .json({ success: false, message: "User not found" });
       }
 
       res.json({ success: true, data: user });
@@ -40,7 +42,11 @@ exports.userController = {
         fingerprint_id,
       });
 
-      res.json({ success: true, message: "User created successfully", data: user });
+      res.json({
+        success: true,
+        message: "User created successfully",
+        data: user,
+      });
     } catch (error) {
       console.error(error);
       res.status(500).json({ success: false, message: "Error creating user" });
@@ -56,7 +62,9 @@ exports.userController = {
       const user = await UserModel.findByPk(id);
 
       if (!user) {
-        return res.status(404).json({ success: false, message: "User not found" });
+        return res
+          .status(404)
+          .json({ success: false, message: "User not found" });
       }
 
       await user.update({
@@ -65,7 +73,11 @@ exports.userController = {
         fingerprint_id,
       });
 
-      res.json({ success: true, message: "User updated successfully", data: user });
+      res.json({
+        success: true,
+        message: "User updated successfully",
+        data: user,
+      });
     } catch (error) {
       console.error(error);
       res.status(500).json({ success: false, message: "Error updating user" });
@@ -79,7 +91,9 @@ exports.userController = {
       const user = await UserModel.findByPk(id);
 
       if (!user) {
-        return res.status(404).json({ success: false, message: "User not found" });
+        return res
+          .status(404)
+          .json({ success: false, message: "User not found" });
       }
 
       await user.destroy();

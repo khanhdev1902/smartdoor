@@ -57,7 +57,7 @@ export function useUser() {
     });
 
     if (res) {
-      setUsers((prev) => prev.map((u) => (u.id === id ? res.data : u)));
+      setUsers((prev) => prev.map((u) => (u.id === id ? res.data.data : u)));
       return res.data;
     }
     return null;
@@ -69,7 +69,7 @@ export function useUser() {
       return null;
     });
 
-    if (res !== null) {
+    if (res) {
       setUsers((prev) => prev.filter((u) => u.id !== id));
       return true;
     }

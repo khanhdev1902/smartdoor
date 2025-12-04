@@ -1,5 +1,5 @@
 export interface User {
-  id?: number;
+  id: number;
   name: string;
   status?: string;
   fingerprint_id: string;
