@@ -5,9 +5,17 @@ const { userRouter } = require("./routers/UserRouter");
 
 const app = express();
 
-app.use(express.json());
 app.use(cors());
+app.use(express.json());
 
-app.use("/users", userRouter);
+// ROUTES
+app.use("/api/users", userRouter);
 
-module.exports = serverless(app);
+// ROUTE TEST
+app.get("/api", (req, res) => {
+  res.json({ message: "API is running on Vercel" });
+});
+
+// Export đúng cách cho Vercel
+module.exports = app;
+module.exports.handler = serverless(app);
