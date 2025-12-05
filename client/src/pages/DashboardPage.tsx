@@ -23,6 +23,15 @@ export default function Dashboard() {
     const res = await doorAPI.openDoor({ statusDoor: open });
     console.log(res.data.open);
     const data = res.data.open;
+    if (data === "open") {
+      toast.success("Mở cửa thành công !", {
+        action: { label: "Undo", onClick: () => {} },
+      });
+    } else {
+      toast.success("Đóng cửa thành công !", {
+        action: { label: "Undo", onClick: () => {} },
+      });
+    }
     setStatusDoor(data);
   };
   useEffect(() => {
@@ -36,7 +45,7 @@ export default function Dashboard() {
   }, []);
   if (loading) return <p>Đang tải...</p>;
   if (error) {
-    toast.error("Vân tay đã tồn tại !", {
+    toast.error(error, {
       action: { label: "Undo", onClick: () => {} },
     });
   }
@@ -61,16 +70,20 @@ export default function Dashboard() {
           action: { label: "Undo", onClick: () => {} },
         });
       } else {
-        await updateUser(form.id, form);
-        toast.success(`Cập nhập thông tin của ${form.name} thành công !`, {
+        const ok = await updateUser(form.id, form);
+        if (ok) {
+          toast.success(`Cập nhập thông tin của ${form.name} thành công !`, {
+            action: { label: "Undo", onClick: () => {} },
+          });
+        }
+      }
+    } else {
+      const ok = await createUser(form);
+      if (ok) {
+        toast.success(`Thêm mới người dùng ${form.name} thành công  !`, {
           action: { label: "Undo", onClick: () => {} },
         });
       }
-    } else {
-      await createUser(form);
-      toast.success(`Thêm mới người dùng ${form.name} thành công  !`, {
-        action: { label: "Undo", onClick: () => {} },
-      });
     }
     setForm({
       id: 0,
@@ -82,40 +95,40 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="w-full h-full container px-10 py-5">
-      <div className="flex flex-row justify-between min-h-52">
-        <div className="p-3 rounded-3xl shadow-sm h-fit flex items-center gap-10 px-7">
+    <div className="w-full h-full container px-2 lg:px-10 py-5">
+      <div className="flex flex-row justify-between min-h-52 flex-wrap gap-10">
+        <div className="p-3 rounded-3xl shadow-sm h-fit flex items-center gap-10 px-7 flex-wrap">
           <div className=" rounded-2xl shadow-sm flex justify-between items-center gap-12 px-10 py-3 border">
             <span className="text-lg">Trạng thái cửa:</span>
             <span
               className={cn(
-                "bg-[#b200001a] px-14 py-2 rounded-4xl font-bold text-red-800",
+                "bg-[#b200001a] min-w-44 text-center py-2 rounded-4xl font-bold text-red-800",
                 statusDoor && "bg-[#00acb21a] text-green-800 "
               )}
             >
               {statusDoor ? "Đang mở" : "Đang đóng"}
             </span>
           </div>
-          <div className=" space-x-2">
+          <div className="flex flex-row justify-center gap-2">
             <Button
               variant={"outline"}
               className=" px-10 rounded-4xl"
               onClick={() => openDoor("close")}
             >
-              Đóng
+              Đóng cửa
             </Button>
             <Button
               variant={"outline"}
               className=" px-10 rounded-4xl"
               onClick={() => openDoor("open")}
             >
-              Mở
+              Mở cửa
             </Button>
           </div>
         </div>
         <div>
           <div className="flex flex-row items-end gap-4 shadow-sm px-5 py-3 rounded-full">
-            <span className="text-lg hidden sm:flex">Thêm người dùng mới:</span>
+            <span className="text-lg">Thêm người dùng mới:</span>
             <Button
               variant="outline"
               onClick={() => {
@@ -143,7 +156,7 @@ export default function Dashboard() {
       </div>
 
       <div>
-        <div className="color-primary font-bold text-2xl pb-5">
+        <div className="color-primary font-bold text-2xl py-5">
           Danh sách người dùng
         </div>
         <UserTable users={users} setOpen={setOpen} setForm={setForm} />

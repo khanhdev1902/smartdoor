@@ -3,7 +3,7 @@ import { Bell, Newspaper } from "lucide-react";
 import { CalendarInput } from "./CaledarInput";
 export default function Header() {
   return (
-    <header className=" flex flex-row justify-between items-center px-10 py-4 shadow-sm">
+    <header className=" flex flex-row justify-between items-center px-10 py-4 shadow-sm w-full">
       <div className="flex flex-row gap-3 items-center">
         <Newspaper size={36} className="text-[#c02425]" />
         <span className="text-3xl font-bold color-primary">Smart Door</span>
