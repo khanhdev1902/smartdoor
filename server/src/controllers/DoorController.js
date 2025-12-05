@@ -28,13 +28,11 @@ exports.doorController = {
   async getFingerprintID(req, res) {
     try {
       const door = await DoorModel.findByPk(1);
-      res
-        .status(200)
-        .json({
-          success: true,
-          open: door.status==="open",
-          fingerprint_id: door.temp_fingerprint_id,
-        });
+      res.status(200).json({
+        success: true,
+        open: door.status === "open",
+        fingerprint_id: door.temp_fingerprint_id,
+      });
     } catch (error) {
       console.error(error);
       res
@@ -57,13 +55,13 @@ exports.doorController = {
         return;
       }
       if (fingerprint_id != null && fingerprint_id !== "") {
-        const door = await UserModel.findOne({
+        const user = await UserModel.findOne({
           where: { fingerprint_id: fingerprint_id },
         });
-        if (!door) {
-          const item = await DoorModel.findByPk(1);
-          const status = item.status;
-          await item.update({
+        if (!user) {
+          const door = await DoorModel.findByPk(1);
+          const status = door.status;
+          await door.update({
             status: status,
             temp_fingerprint_id: fingerprint_id,
           });
@@ -74,17 +72,21 @@ exports.doorController = {
           });
           return;
         }
-
-        const item = await DoorModel.findByPk(1);
-        const status = item.status === "open" ? "close" : "open";
-        await item.update({
+        const door = await DoorModel.findByPk(1);
+        const status =
+          user.status === "active"
+            ? door.status === "open"
+              ? "close"
+              : "open"
+            : door.status;
+        await door.update({
           status: status,
           temp_fingerprint_id: fingerprint_id,
         });
         res.json({
           success: true,
-          open: status === "open",
-          data: item,
+          open: status === "open" && user.status === "active",
+          data: door,
         });
         return;
       }
